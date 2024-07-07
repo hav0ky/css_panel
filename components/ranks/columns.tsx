@@ -159,10 +159,10 @@ export function getColumns(): ColumnDef<ExtRank>[] {
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider> */}
-                    <Avatar>
+                    {/* <Avatar>
                         <AvatarImage src={row.original.player_avatar!} alt={row.original.player_name!} />
                         <AvatarFallback>{row.original.player_name}</AvatarFallback>
-                    </Avatar>
+                    </Avatar> */}
                     <Link href={`https://steamcommunity.com/profiles/${row.original.player_steamid}`} target="_blank" passHref className="flex flex-col -ml-1">
                         <p className="truncate text-ellipsis max-w-36 group-hover:underline px-2 py-1 rounded-lg cursor-pointer">{row.original.player_name}</p>
                     </Link>
@@ -233,13 +233,13 @@ export function getColumns(): ColumnDef<ExtRank>[] {
                 return <p>{row.original.deaths}</p>
             },
         },
-        {
-            accessorKey: "wp",
-            header: "Round Win(W, L)",
-            cell: ({ row }) => {
-                return <p>{row.original.wp}% (<span className="text-green-300">{row.original.round_win}</span>, <span className="text-red-300">{row.original.round_lose}</span>)</p>
-            },
-        },
+        // {
+        //     accessorKey: "wp",
+        //     header: "Round Win(W, L)",
+        //     cell: ({ row }) => {
+        //         return <p>{row.original.wp}% (<span className="text-green-300">{row.original.round_win}</span>, <span className="text-red-300">{row.original.round_lose}</span>)</p>
+        //     },
+        // },
         {
             accessorKey: "playtime",
             header: "Playtime",
@@ -247,15 +247,15 @@ export function getColumns(): ColumnDef<ExtRank>[] {
                 return <p>{(row.original.playtime / 3600).toFixed(2)} hrs</p>
             },
         },
-        {
-            accessorKey: "lastconnect",
-            header: () => <p className="text-right">Last Played</p>,
-            cell: ({ row }) => {
-                return <p className="text-muted-foreground text-sm font-normal text-right">
-                    {/* {player?.lastconnect} */}
-                    {format(row.original.lastconnect * 1000)}
-                </p>
-            },
-        },
+        // {
+        //     accessorKey: "lastconnect",
+        //     header: () => <p className="text-right">Last Played</p>,
+        //     cell: ({ row }) => {
+        //         return <p className="text-muted-foreground text-sm font-normal text-right">
+        //             {/* {player?.lastconnect} */}
+        //             {format(row.original.lastconnect * 1000)}
+        //         </p>
+        //     },
+        // },
     ]
 }

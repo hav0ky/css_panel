@@ -2,16 +2,18 @@ import GetSteamUsers from "@/lib/functions/GetSteamUsers"
 import query from "@/lib/functions/db"
 import queryParamsSchema from "@/lib/schemas/queryParams"
 import { SA_Ban } from "@/types/db/plugin"
-import { NextApiRequest } from "next"
+import { NextRequest } from "next/server"
 
-export async function GET(request: NextApiRequest,) {
+export async function GET(request: NextRequest) {
     try {
+        const search = request.nextUrl.searchParams
+        // const { page, rows } = queryParamsSchema.parse(request.nextUrl.searchParams.)
+        const page = search.get('page')
+        const rows = search.get('rows')
 
-
-        const { page, rows } = queryParamsSchema.parse(request.query)
         const shouldShowAdminName = true
 
-        const dbBans = await query.bans.getAll(page, rows)
+        const dbBans = await query.bans.getAll(Number(page || 0), Number(rows || 10))
         const count = await query.bans.count()
 
         const filteredSteams = [

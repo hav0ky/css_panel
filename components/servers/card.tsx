@@ -74,7 +74,7 @@ const ServerCard = ({ serverId }: { serverId: number }) => {
                     <div className="flex items-center justify-between space-x-4">
                         <div className="space-y-3 w-1/2 sm:w-3/4 pb-2">
                             <h4 className="font-semibold text-zinc-100 truncate">
-                                {data.hostname}
+                                [Samatva] Server Name | samatva.gg
                             </h4>
                             <Progress value={data.playersPercentage} />
                         </div>

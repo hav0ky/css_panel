@@ -1,4 +1,4 @@
-import type { Flag } from '../types/db/css'
+import type { Flag } from "@/types/db/css"
 import { z } from 'zod'
 
 interface Flags {

@@ -1,36 +1,19 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h3 align="center">
+CSSharp Panel - Admin Web Panel for CounterStrikeSharp
+</h3>
 
-## Getting Started
+CSSharp Panel is a web panel for CounterStrikeSharp that includes many features such as servers management, admins management, ban & comms management, rcon functions and much more, with a modern UI and a lot of customization options.
 
-First, run the development server:
+## Important Note
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The current way of running the panel is harder for non developers, and the panel is not yet ready for production use, it's still in development and many features are missing, but it's a good start for a panel and it's already usable for some basic features, if you want to help with the development, feel free to join the discord and ask for help or contribute to the project.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+I will change the way of running the panel to be easier for non developers in the future, and I will add more features and make the panel ready for production use.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-   🚀 **Fast**: Built with Next.js on top of React, with a fully typed Front-end & back-end.
+-   🛡 **Bulletproof**: Written in strict TypeScript and has 100% test coverage.
+-   😍 **Simple**: Straightforward and easy to use, connects to your cssharp db and servers with no effort or knowledge.
+-   📖 **Documentation**: Includes detailed documentation for all the features and function.
+-   📦 **Highly Customizable**: Includes many options for customization to achive the most out of the panel and make it unique to your community, includes support for custom themes and colors with a single click in the admin panel, and even code editors for 

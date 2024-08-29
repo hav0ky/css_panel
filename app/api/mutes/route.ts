@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
         const mappedMutes: ExtMute[] = mutes.filter((mute) => !!mute) as ExtMute[]
 
-        return { data: mappedMutes, count: count }
+        return Response.json({ data: mappedMutes, count: count })
     } catch (error) {
         return Response.json({ error }, { status: 404 })
     }

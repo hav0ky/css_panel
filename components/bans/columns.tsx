@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import * as React from "react"
 import { type ColumnDef } from "@tanstack/react-table"
 import { toast } from "sonner"

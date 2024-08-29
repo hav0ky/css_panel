@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/panel/menu";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "@/components/panel/sidebar-toggle";
+import Image from "next/image";
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
@@ -31,8 +32,9 @@ export function Sidebar() {
           asChild
         >
           <Link href="/" className="flex items-center gap-2">
-            <PanelsTopLeft className="w-6 h-6 mr-1" />
-            <h1
+            {/* <PanelsTopLeft className="w-6 h-6 mr-1" /> */}
+            <Image src="/img/logo.png" alt="logo" height={35} width={35} className="mr-2 -mt-1" />
+            <div
               className={cn(
                 "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
                 sidebar?.isOpen === false
@@ -40,9 +42,19 @@ export function Sidebar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-              samatva.gg
-            </h1>
+              {/* <Image src="/img/logo.png" alt="logo" height={35} width={35} className="-mt-1" /> */}
+              <span className="z-10 font-medium -ml-2">Samatva</span>
+            </div>
           </Link>
+          {/* <Link href="/" className={cn(
+            "flex items-center text-xl tracking-wider select-none gap-1.5 transition-[transform,opacity,display] ease-in-out duration-300",
+            sidebar?.isOpen === false
+              ? "-translate-x-96 opacity-0 hidden"
+              : "translate-x-0 opacity-100"
+          )}>
+            <Image src="/img/logo.png" alt="logo" height={35} width={35} className="-mt-1" />
+            <span className="z-10 font-medium">Samatva</span>
+          </Link> */}
         </Button>
         <Menu isOpen={sidebar?.isOpen} />
       </div>

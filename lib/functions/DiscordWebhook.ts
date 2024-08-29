@@ -3,7 +3,7 @@ import axios from 'axios'
 const DiscordWebhook = async ({ url, content, embeds }: Webhook) => {
 	try {
 		const data = {
-			username: 'ProAim',
+			username: 'Samatva',
 			content,
 			embeds,
 		}
@@ -23,9 +23,18 @@ interface Webhook {
 interface Embed {
 	title: string
 	color?: number
+	author: {
+		name: string,
+		url: string,
+		icon_url: string
+	},
 	fields?: Field[]
 	description?: string
 	timestamp?: string
+	footer?: {
+		text: string,
+		icon_url: string,
+	},
 }
 
 interface Field {

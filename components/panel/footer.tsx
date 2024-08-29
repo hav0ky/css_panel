@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
@@ -29,9 +30,23 @@ export function Footer() {
     // </div>
     <div className="z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-4 md:mx-8 flex h-14 items-center">
-        <p className="text-xs md:text-sm leading-loose text-muted-foreground text-left">
+        {/* <p className="text-xs md:text-sm leading-loose text-muted-foreground text-left">
           Some footer.
-        </p>
+        </p> */}
+        <div className="flex gap-2">
+          <Link href="https://samatva.gg" className="flex gap-1 items-center text-sm text-secondary-foreground hover:underline">
+            Samatva
+            <ExternalLink size={14} />
+          </Link>
+          <Link href="https://rp.samatva.gg" className="flex gap-1 items-center text-sm text-secondary-foreground hover:underline">
+            Samatva RolePlay
+            <ExternalLink size={14} />
+          </Link>
+          {/* <Link href="https://minecraft.samatva.gg" className="flex gap-1 items-center text-sm">
+            Samatva
+            <ExternalLink size={14} />
+          </Link> */}
+        </div>
       </div>
     </div>
   );

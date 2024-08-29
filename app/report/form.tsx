@@ -12,6 +12,9 @@ import { reportSchema } from "@/lib/schemas/reportSchema"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { useSession } from "../provider";
+import axios from "axios";
 
 type Input = z.infer<typeof reportSchema>
 
@@ -19,7 +22,7 @@ interface ReportFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function ReportForm({ className, ...props }: ReportFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
-    const router = useRouter()
+    const { user } = useSession()
     const form = useForm<Input>({
         resolver: zodResolver(reportSchema),
         defaultValues: {
@@ -30,9 +33,26 @@ export function ReportForm({ className, ...props }: ReportFormProps) {
 
     async function onSubmit(data: Input) {
         setIsLoading(true)
-        console.log('hi')
-    }
+        try {
+            if (!user) {
+                toast.error("User not signed In!")
+                setIsLoading(false)
+                return
+            }
 
+            if (!data.user || !data.reason) {
+                toast.error("Fill all the details!")
+                setIsLoading(false)
+                return
+            }
+            await axios.post("/api/discord/webhook", { title: "Report Request", description: `${data.user} \n ${data.reason}`, name: user?.player_name, icon_url: user?.player_avatar, id: user?.id })
+            toast.success("We've received your report request and will review it carefully before taking any necessary action.")
+        } catch (error) {
+            toast.error("Something went wrong :(")
+        } finally {
+            setIsLoading(false)
+        }
+    }
     return (
         <div className={className} {...props}>
             <Form {...form}>

@@ -9,6 +9,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Image from "next/image";
 
 export function SheetMenu() {
   return (
@@ -25,9 +26,9 @@ export function SheetMenu() {
             variant="link"
             asChild
           >
-            <Link href="/" className="flex items-center gap-2">
-              <PanelsTopLeft className="w-6 h-6 mr-1" />
-              <h1 className="font-bold text-lg">proaim.cc</h1>
+            <Link href="/" className="flex items-center text-xl tracking-wider select-none gap-1.5">
+              <Image src="/img/logo.png" alt="logo" height={35} width={35} className="-mt-1" />
+              <span className="z-10 font-medium">Samatva</span>
             </Link>
           </Button>
         </SheetHeader>

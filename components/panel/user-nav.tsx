@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { LayoutGrid, LogOut, User } from "lucide-react";
+import { LayoutGrid, LogOut, } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,10 +24,12 @@ import next_axios from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/app/provider";
 import SignInButton from "../signin";
+import { useEffect } from "react";
+import BanMenu from "../bans/sheet";
+import { User } from "lucia";
+// import { SA_User } from "@/types/db/plugin";
 
-export function UserNav() {
-
-  const { user } = useSession()
+export function UserNav({ user }: { user: User | null }) {
 
   const router = useRouter()
 
@@ -37,7 +39,7 @@ export function UserNav() {
       loading: 'Signing out now. Come back soon!',
       success: (data) => {
         router.refresh()
-        router.push('/')
+        window.location.href = "/"
         return `Signed out successfully!`;
       },
       error: 'Something went wrong :(',
@@ -81,20 +83,17 @@ export function UserNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/" className="flex items-center">
-              <LayoutGrid className="w-4 h-4 mr-3 text-muted-foreground" />
-              Dashboard
-            </Link>
+            <BanMenu admin={user} />
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/account" className="flex items-center">
+            <div className="flex items-center">
               <User className="w-4 h-4 mr-3 text-muted-foreground" />
               Account
-            </Link>
+            </div>
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
         {/* <DropdownMenuItem className="hover:cursor-pointer"> */}
 

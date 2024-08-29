@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form"
 import { reportSchema } from "@/lib/schemas/reportSchema"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import axios from "axios";
+import { useSession } from "../provider";
+import { toast } from "sonner";
 
 type Input = z.infer<typeof reportSchema>
 
@@ -17,6 +20,7 @@ interface AppealFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function AppealForm({ className, ...props }: AppealFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const { user } = useSession()
 
     const form = useForm<Input>({
         resolver: zodResolver(reportSchema),
@@ -28,7 +32,24 @@ export function AppealForm({ className, ...props }: AppealFormProps) {
 
     async function onSubmit(data: Input) {
         setIsLoading(true)
-        console.log('hi')
+        try {
+            if (!user) {
+                toast.error("User not signed In!")
+                setIsLoading(false)
+                return
+            }
+            if (!data.user || !data.reason) {
+                toast.error("Fill all the details!")
+                setIsLoading(false)
+                return
+            }
+            await axios.post("/api/discord/webhook", { title: "Appeal Request", description: `${data.user} \n ${data.reason}`, name: user?.player_name, icon_url: user?.player_avatar, id: user?.id })
+            toast.success("We've received your appeal request and will review it carefully before taking any necessary action.")
+        } catch (error) {
+            toast.error("Something went wrong :(")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (

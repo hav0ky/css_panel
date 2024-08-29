@@ -14,6 +14,22 @@ import { Progress } from "@/components/ui/progress"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { ExtMute, UnmuteUser } from "@/server/mutes"
 import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import next_axios from "@/lib/axios"
+import { toast } from "sonner"
+import { UndoDialog } from "../undo"
 
 export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtMute>[] {
     return [
@@ -115,7 +131,7 @@ export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtMu
                 return (
                     <div className="flex gap-1">
                         <Badge variant="warning">{duration === 0 ? 'Permanent' : `${duration} minutes`}</Badge>
-                        {is_admin &&
+                        {/* {is_admin &&
                             <div className="flex justify-end">
                                 {row.original.status == 'ACTIVE' &&
                                     <form action={() => UnmuteUser(row.original.id, 'test')}>
@@ -125,7 +141,7 @@ export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtMu
                                     </form>
                                 }
                             </div>
-                        }
+                        } */}
                     </div>
                 )
             },
@@ -179,6 +195,104 @@ export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtMu
                     // <Progress
                     //     value={percentage}
                     // />
+                )
+            },
+        },
+        {
+            accessorKey: "actions",
+            header: () => <p className="text-right"></p>,
+            cell: ({ row }: { row: { original: ExtMute } }) => {
+                const [unbanOpen, SetUnbanOpen] = React.useState<boolean>(false)
+                const [rebanOpen, SetRebanOpen] = React.useState<boolean>(false)
+
+                const handleUnban = async (reason: string) => {
+                    if (!unbanOpen) return
+
+                    try {
+                        const res = await next_axios.put(`/api/mutes`, {
+                            banId: row.original.id,
+                            reason
+                        })
+
+                        toast.success('Unbanned user successfully!')
+                    } catch (error) {
+                        toast.error('Error unbanning user :(')
+                    } finally {
+                        SetUnbanOpen(false)
+                    }
+                }
+
+                const handleReban = async (reason: string, duration?: number) => {
+                    if (!unbanOpen) return
+
+                    try {
+                        const res = await next_axios.post(`/api/bans/reban`, {
+                            banId: row.original.id,
+                            duration,
+                            reason
+                        })
+
+                        toast.success('ReMuted user successfully!')
+                    } catch (error) {
+                        toast.error('Error remuting user :(')
+                    } finally {
+                        SetRebanOpen(false)
+                    }
+                }
+
+                return (
+                    <div className="flex justify-end">
+                        <UndoDialog
+                            open={unbanOpen}
+                            onOpenChange={(open) => SetUnbanOpen(open)}
+                            title="Are you sure you want to delete this rule?"
+                            text="This action cannot be undone."
+                            label="Unmute"
+                            onAction={handleUnban}
+                        />
+                        <UndoDialog
+                            open={rebanOpen}
+                            onOpenChange={(open) => SetRebanOpen(open)}
+                            title="Are you sure you want to delete this rule?"
+                            text="This action cannot be undone."
+                            label="Remute"
+                            duration
+                            onAction={handleReban}
+                        />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="h-8 w-8 p-0">
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                                <DropdownMenuItem onSelect={() => { navigator.clipboard.writeText(row.original.player_steamid!); toast.success(`${row.original.player_steamid} copied to clipboard.`) }}>
+                                    Copy Steam Id
+                                </DropdownMenuItem>
+                                {is_admin &&
+                                    <DropdownMenuItem
+                                        onSelect={() => SetUnbanOpen(true)}
+                                    >
+                                        Unmute
+                                    </DropdownMenuItem>
+                                }
+                                {is_admin &&
+                                    <DropdownMenuItem
+                                        disabled
+                                        onSelect={() => SetRebanOpen(true)}
+                                    >
+                                        Remute
+                                    </DropdownMenuItem>
+                                }
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        {/* <div className="flex justify-end">
+                        <Badge variant="warning">
+                            Permanent
+                        </Badge>
+                    </div> */}
+                    </div>
                 )
             },
         },

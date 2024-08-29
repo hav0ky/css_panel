@@ -32,6 +32,8 @@ import { Progress } from "@/components/ui/progress"
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { ExtBan } from "@/app/api/bans/route"
+import { UndoDialog } from "../undo"
+import next_axios from "@/lib/axios"
 
 export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtBan>[] {
 
@@ -206,16 +208,63 @@ export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtBa
             accessorKey: "actions",
             header: () => <p className="text-right"></p>,
             cell: ({ row }: { row: { original: ExtBan } }) => {
-                const duration = row.original.duration
+                const [unbanOpen, SetUnbanOpen] = React.useState<boolean>(false)
+                const [rebanOpen, SetRebanOpen] = React.useState<boolean>(false)
+
+                const handleUnban = async (reason: string) => {
+                    if (!unbanOpen) return
+
+                    try {
+                        const res = await next_axios.put(`/api/bans`, {
+                            banId: row.original.id,
+                            reason
+                        })
+
+                        toast.success('Unbanned user successfully!')
+                    } catch (error) {
+                        toast.error('Error unbanning user :(')
+                    } finally {
+                        SetUnbanOpen(false)
+                    }
+                }
+
+                const handleReban = async (reason: string, duration?: number) => {
+                    if (!unbanOpen) return
+
+                    try {
+                        const res = await next_axios.post(`/api/bans/reban`, {
+                            banId: row.original.id,
+                            duration,
+                            reason
+                        })
+
+                        toast.success('Rebanned user successfully!')
+                    } catch (error) {
+                        toast.error('Error rebanning user :(')
+                    } finally {
+                        SetRebanOpen(false)
+                    }
+                }
+
                 return (
                     <div className="flex justify-end">
-                        {/* <ConfirmationDialog
-                        open={rowIndex === i}
-                        onOpenChange={(open) => setRowIndex(open ? i : null)}
-                        title="Are you sure you want to delete this rule?"
-                        text="This action cannot be undone."
-                        onAction={handleDelete}
-                    /> */}
+                        <UndoDialog
+                            open={unbanOpen}
+                            onOpenChange={(open) => SetUnbanOpen(open)}
+                            title="Are you sure you want to delete this rule?"
+                            text="This action cannot be undone."
+                            label="Unban"
+                            onAction={handleUnban}
+                        />
+                        <UndoDialog
+                            open={rebanOpen}
+                            onOpenChange={(open) => SetRebanOpen(open)}
+                            title="Are you sure you want to delete this rule?"
+                            text="This action cannot be undone."
+                            label="Reban"
+                            duration
+                            onAction={handleReban}
+                        />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="h-8 w-8 p-0">
@@ -224,17 +273,24 @@ export function getColumns({ is_admin }: { is_admin: boolean }): ColumnDef<ExtBa
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => { navigator.clipboard.writeText(row.original.player_steamid!); toast.success(`${row.original.player_steamid} copied to clipboard.`) }}>
                                     Copy Steam Id
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    Unban
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                // onSelect={() => setRowIndex(i)}
-                                >
-                                    Reban
-                                </DropdownMenuItem>
+                                {is_admin &&
+                                    <DropdownMenuItem
+                                        onSelect={() => SetUnbanOpen(true)}
+                                    >
+                                        Unban
+                                    </DropdownMenuItem>
+                                }
+                                {is_admin &&
+                                    <DropdownMenuItem
+                                        disabled
+                                        onSelect={() => SetRebanOpen(true)}
+                                    >
+                                        Reban
+                                    </DropdownMenuItem>
+                                }
                             </DropdownMenuContent>
                         </DropdownMenu>
                         {/* <div className="flex justify-end">

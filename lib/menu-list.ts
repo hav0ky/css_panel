@@ -119,7 +119,7 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Socials",
       menus: [
         {
-          href: "https://discord.com",
+          href: "https://discord.gg/samatva",
           label: "Discord",
           active: false,
           icon: ExternalLink,

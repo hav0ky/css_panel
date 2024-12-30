@@ -19,6 +19,6 @@ export async function GET(
         return Response.json(serverInfo, { status: 200 })
     } catch (error) {
         console.log(error)
-        return Response.json({ error }, { status: 500 })
+        return Response.json({ error: error }, { status: 500 })
     }
 }
